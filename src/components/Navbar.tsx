@@ -77,11 +77,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Decorative top accent */}
         <div className="h-1 w-full bg-gradient-to-r from-[#183B28] via-[#C9A227] to-[#2563eb] opacity-70 rounded-full mx-auto md:mx-0 mb-3" />
 
-        <div className="flex items-center justify-between h-20 sm:h-24 xl:h-28">
+      <div className="flex items-center justify-between gap-3 min-w-0 min-h-20 py-3 sm:min-h-24 xl:min-h-28">
           {/* Logo & Brand: Kannada for Everyone */}
           <button
             onClick={onReturnToIntroduction}
-            className="cursor-pointer flex items-center gap-4 text-left focus:outline-none group"
+            className="cursor-pointer flex shrink-0 items-center gap-3 text-left focus:outline-none group"
             title="Return to Introduction Page"
           >
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#183B28] to-[#0f291c] flex items-center justify-center text-amber-200 font-kannada font-bold text-2xl sm:text-3xl shadow-lg border border-[#183B28]/40 group-hover:scale-105 transition-transform duration-300">
@@ -104,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-1">
+         <nav className="hidden 2xl:flex flex-1 min-w-0 items-center justify-center gap-0.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = item.isIntro ? activeTab === 'intro' : activeTab === item.id;
@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       setActiveTab(item.id);
                     }
                   }}
-                  className={`cursor-pointer px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center gap-2.5 ${
+                  className={`cursor-pointer px-2 py-2 rounded-xl text-xs font-semibold transition-all duration-300 flex items-center gap-1.5  ${
                     isActive
                       ? 'bg-[#183B28] text-white shadow-[0_8px_24px_rgba(24,59,40,0.22)] border border-[#183B28]/40'
                       : 'text-[#526056] hover:text-[#183B28] hover:bg-[#F2ECE1] hover:border-transparent border border-transparent'
@@ -132,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Action Controls */}
-          <div className="flex items-center gap-2 sm:gap-3">
+         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {/* Points & Badges */}
             <button
               onClick={() => setActiveTab('progress')}
@@ -239,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Drawer Trigger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="cursor-pointer xl:hidden p-2.5 rounded-2xl text-[#183B28] hover:bg-[#183B28]/10 transition-all duration-300"
+             className="cursor-pointer 2xl:hidden p-2.5 rounded-2xl text-[#183B28] hover:bg-[#183B28]/10 transition-all duration-300"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -250,7 +250,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-white border-b border-[#E6E0D5] px-4 pt-3 pb-6 space-y-2 shadow-xl">
+        <div className="2xl:hidden bg-white border-b border-[#E6E0D5] px-4 pt-3 pb-6 space-y-2 shadow-xl">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = item.isIntro ? activeTab === 'intro' : activeTab === item.id;
