@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-kannada: 'Noto Sans Kannada', sans-serif;
+    --font-kannada-serif: 'Noto Serif Kannada', serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #FBF8F2;
+    color: #232723;
+  }
+}
+
+.font-kannada {
+  font-family: 'Noto Sans Kannada', system-ui, sans-serif;
+}
+
+.font-kannada-serif {
+  font-family: 'Noto Serif Kannada', Georgia, serif;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1ede4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8bcab;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9f917e;
+}

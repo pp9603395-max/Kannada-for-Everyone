@@ -1,0 +1,8 @@
+{
+  "name": "Kannada for Everyone",
+  "description": "An interactive, full-stack language-learning platform and cultural bridge for the Kannada Digital Innovation Challenge.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

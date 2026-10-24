@@ -1,0 +1,94 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // 1. Users collection: Private user profile and subcollections, owned strictly by auth.uid
+    match /users/{uid} {
+      allow read, write: if isOwner(uid) && isValidId(uid);
+
+      match /{subcollection=**} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // 2. User Progress collection: Completed lessons, quiz scores, streak
+    match /userProgress/{uid} {
+      allow read, write: if isOwner(uid) && isValidId(uid);
+    }
+
+    // 3. Saved Vocabulary collection: Words marked for revision
+    match /savedVocabulary/{uid} {
+      allow read, write: if isOwner(uid) && isValidId(uid);
+    }
+
+   
+    
+    // 4. Point Transactions: Append-only ledger of earned points
+    match /pointTransactions/{transactionId} {
+      // Allow checking a transaction ID belonging to this user,
+      // including when the transaction document does not exist yet.
+      allow get: if isAuthenticated()
+        && transactionId.matches(
+          '^tx_' + request.auth.uid + '_.*$'
+        );
+
+      // Allow users to read only their own existing transactions.
+      allow list: if isAuthenticated()
+        && resource.data.userId == request.auth.uid;
+
+      // Users may create transactions only for themselves.
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid
+        && isValidId(transactionId);
+
+      // Transactions cannot be changed or deleted.
+      allow update, delete: if false;
+    }
+
+    // 5. User Badges: Unlocked badge milestones
+    match /userBadges/{uid} {
+      allow read, write: if isOwner(uid) && isValidId(uid);
+    }
+
+    // 6. Leaderboard: authenticated learners can read; owners may update only
+    // their own row and the XP value must match their private user document.
+    match /leaderboard/{uid} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(uid)
+        && isValidId(uid)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 80
+        && request.resource.data.totalPoints is number
+        && request.resource.data.totalPoints >= 0
+        && request.resource.data.weeklyPoints is number
+        && request.resource.data.weeklyPoints >= 0
+        && request.resource.data.totalPoints == get(/databases/$(database)/documents/users/$(uid)).data.totalPoints;
+      allow delete: if false;
+    }
+
+    // 7. Diagnostics: read-only connection probe used by the client boot check.
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /_health/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
